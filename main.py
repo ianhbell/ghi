@@ -45,4 +45,4 @@ def get_open_issues():
     return render_template('frontend.html', items=get_items(session))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True, ssl_context=('cert.pem', 'key.pem'))
