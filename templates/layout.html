@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title> REFPROP open issues </title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <link href="//code.jquery.com/ui/1.9.2/themes/humanity/jquery-ui.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <b><big>Issues:</big></b>
+    <table>
+        <thead>
+        <tr id="header_row" class="ui-widget-header">
+            <th class="status">Repo</th>
+            <th class="status">Issue #</th>
+            <th class="data_id">Title</th>
+            <th class="assignees">Assignees</th>
+        </tr>
+        </thead>
+        <tbody id="table_contents" class="ui-widget-content">
+            {% block content %}{% endblock %}
+        </tbody>
+    </table>
+</body>
+</html>
