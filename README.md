@@ -8,7 +8,7 @@ And use with gunicorn:
 gunicorn --certfile=cert.pem --keyfile=key.pem --bind 0.0.0.0:443 main:app
 ``` 
 
-Put in /etc/supervisord.conf
+Put in ``/etc/supervisord.conf`` (see https://supervisord.org)
 ```
 [program:gunicorn-issues]
 command=gunicorn main:app
