@@ -22,6 +22,6 @@ stdout_logfile=/tmp/super_stdout
 
 0. Install supervisor with apt
 1. Make a sample conf file with echo_supervisord_conf (see http://supervisord.org/installing.html#creating-a-configuration-file)
-2. Append above chunk, copy to ``/etc/supervisord.conf``
+2. Append above chunk, copy to ``/etc/supervisor/supervisord.conf`` (to check which config file ubuntu is using, you can do ``ps -ef | grep supervi`` and look at the command line call)
 3. ``sudo service supervisor restart``
 4. Tail ``/tmp/supervisord.log`` to see what happened with supervisor, also check ``stdout_logfile`` for more information
