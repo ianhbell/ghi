@@ -2,7 +2,8 @@
     <tr class="datas">
         <td class="repo"><a href="https://github.com/{{ item.repo }}">{{ item.repo }}</a></td>
         <td class="issuenum"><a href="https://github.com/{{ item.repo}}/issues/{{ item.issue_num }}">#{{ item.issue_num }}</a></td>
-        <td class="title">{{ item.title }}</td>
+        <td style="width:400px" class="title">{{ item.title }}</td>
         <td class="assignees">{{ item.assignees }}</td>
+        <td class="note">{{ item.note }}</td>
     </tr>
 {% endfor %}
