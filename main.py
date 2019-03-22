@@ -12,13 +12,11 @@ from flask import Flask, request, jsonify, current_app, url_for, render_template
 import requests
 app = Flask(__name__)
 
-app.secret_key = os.urandom(32)
-
 ##########################################################
 ##################     ROUTES     ########################
 ##########################################################
 
-the_repos = ['usnistgov/REFPROP-issues','usnistgov/REFPROP-wrappers']
+the_repos = ['usnistgov/REFPROP-issues','usnistgov/REFPROP-wrappers','usnistgov/REFPROP-manager','usnistgov/REFPROP-cmake']
 if sys.platform.startswith('win'):
     HOME = 'Q:/IHB/issues_notes'
 else:
@@ -58,6 +56,7 @@ def get_items(session):
         for issue in session[repo]:
             items.append({
                 'repo': repo,
+                'repo_short': repo.split('/')[0],
                 'issue_num': issue['number'],
                 'title': issue['title'],
                 'assignees': ','.join(get_assignees(issue))
