@@ -12,6 +12,8 @@ from flask import Flask, request, jsonify, current_app, url_for, render_template
 import requests
 app = Flask(__name__)
 
+app.secret_key = os.urandom(32)
+
 ##########################################################
 ##################     ROUTES     ########################
 ##########################################################
@@ -21,6 +23,7 @@ if sys.platform.startswith('win'):
     HOME = 'Q:/IHB/issues_notes'
 else:
     HOME = '/media/Q/IHB/issues_notes'
+
 def api_calls(session):
     for repo in the_repos:
         if repo not in session:
