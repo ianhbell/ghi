@@ -59,7 +59,7 @@ def get_items(session):
         for issue in session[repo]:
             items.append({
                 'repo': repo,
-                'repo_short': repo.split('/')[0],
+                'repo_short': repo.split('/')[1],
                 'issue_num': issue['number'],
                 'title': issue['title'],
                 'assignees': ','.join(get_assignees(issue))
