@@ -6,3 +6,4 @@ dependencies:
     - Flask
     - requests
     - gunicorn
+    - flask-sqlalchemy
