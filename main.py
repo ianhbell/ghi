@@ -50,7 +50,7 @@ def api_calls(session):
             if repo not in session:
                 repoze[repo] = rs.get('https://api.github.com/repos/'+repo+'/issues?state=open', auth=('ianhbell', pat)).json()
     db.session.add(RepoData(session_id=session['Id'], contents=json.dumps(repoze)))
-    db.commit()
+    db.session.commit()
 
 def get_assignees(issue):
     return [a['login'] for a in issue['assignees']]
