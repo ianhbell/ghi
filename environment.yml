@@ -1,4 +1,4 @@
-name: flaskwebview
+name: ghi
 dependencies:
   - python=3.6
   - pandas

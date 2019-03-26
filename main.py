@@ -15,7 +15,7 @@ from flask_sqlalchemy import SQLAlchemy
 # Other libraries
 import requests
 
-here = os.path.dirname(__file__)
+here = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -122,7 +122,7 @@ def get_issues(state):
         log_message = traceback.format_exc()
         print(BE)
     print(log_message)
-    return render_template('frontend.html', items=items, log_message=log_message, state=state)
+    return render_template('frontend.html', items=items, log_message=log_message, state=state, repos = the_repos)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)#, ssl_context=('cert.pem', 'key.pem'))

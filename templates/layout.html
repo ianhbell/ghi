@@ -8,11 +8,11 @@
 </head>
 
 <body>
-    <b><big>Issues:</big></b>
+    {% for repo in repos %}
+    <h3>{{ repo }}</h3>
     <table>
         <thead>
         <tr id="header_row" class="ui-widget-header">
-            <th class="status">Repo</th>
             <th class="status">Issue #</th>
             <th class="data_id">Title</th>
             <th class="assignees">Assignees</th>
@@ -20,9 +20,20 @@
         </tr>
         </thead>
         <tbody id="table_contents" class="ui-widget-content">
-            {% block content %}{% endblock %}
+            {% for item in items %}
+                {% if item.repo == repo %}
+                <tr class="datas">
+                    <td class="issuenum"><a href="https://github.com/{{ item.repo}}/issues/{{ item.issue_num }}">#{{ item.issue_num }}</a></td>
+                    <td style="width:400px" class="title">{{ item.title }}</td>
+                    <td class="assignees">{{ item.assignees }}</td>
+                    <td class="note">{{ item.note }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
         </tbody>
     </table>
+    {% endfor %}
+
 </body>
 Notes Log: <br>
 <textarea cols=120, rows=40> {{ log_message }} </textarea>
