@@ -20,8 +20,8 @@ app.secret_key = os.urandom(32)
 
 # Flask-SQLAlchemy setup
 # ----------------------
-if os.path.exists('test.db'):
-    os.remove('test.db')
+# if os.path.exists('test.db'):
+#     os.remove('test.db')
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:' # See this: https://gehrcke.de/2015/05/in-memory-sqlite-database-and-flask-a-threading-trap/
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -43,17 +43,27 @@ else:
     HOME = '/media/Q/IHB/issues_notes'
 
 def api_calls(session):
+    if 'Id' not in session:
+        session['Id'] = str(uuid.uuid1())
     repoze = {}
+    pat = open('gh_pat','r').read()
+
     with requests.Session() as rs:
-        pat = open('gh_pat','r').read()
         for repo in the_repos:
-            if repo not in session:
-                repoze[repo] = rs.get('https://api.github.com/repos/'+repo+'/issues?state=open', auth=('ianhbell', pat)).json()
+            issues = []
+            r = rs.get('https://api.github.com/repos/'+repo+'/issues?state=all&filter=all', auth=('ianhbell', pat))
+            issues += r.json()
+            while 'next' in r.links:
+                url = r.links['next']['url']
+                r = rs.get(url, auth=('ianhbell', pat))
+                issues += r.json()
+            repoze[repo] = issues
+
     db.session.add(RepoData(session_id=session['Id'], contents=json.dumps(repoze)))
     db.session.commit()
 
 def get_assignees(issue):
-    return [a['login'] for a in issue['assignees']]
+    return [a['login'].replace('EricLemmon','Eric').replace('ianhbell','Ian') for a in issue['assignees']]
 
 def attach_notes(items):
     if not os.path.exists(HOME):
@@ -78,26 +88,27 @@ def attach_notes(items):
         item['note'] = get_note(item)
     return items
 
-def get_items(session):
+def get_items(*, session, state):
     items = []
     repoze = json.loads(RepoData.query.filter_by(session_id=session['Id']).first().contents)
     for repo in the_repos:
         for issue in repoze[repo]:
+            print(repo, issue['number'], issue['state'])
+            if issue['state'] != state:
+                continue
             items.append({
                 'repo': repo,
                 'repo_short': repo.split('/')[1].split('-')[1],
                 'issue_num': issue['number'],
                 'title': issue['title'],
+                'state': issue['state'],
                 'assignees': ','.join(get_assignees(issue))
             })
     return items
 
-@app.route('/')
-def get_open_issues():
-    session['Id'] = str(uuid.uuid1())
-    api_calls(session)
+def _get_issues(state):
     log_message = ''
-    items = get_items(session)
+    items = get_items(session=session, state=state)
     try:
         items = attach_notes(items)
     except BaseException as BE:
@@ -105,6 +116,11 @@ def get_open_issues():
         print(BE)
     print(log_message)
     return render_template('frontend.html', items=items, log_message=log_message)
+
+@app.route('/<state>_issues')
+def get_issues(state):
+    api_calls(session)
+    return _get_issues(state)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)#, ssl_context=('cert.pem', 'key.pem'))
