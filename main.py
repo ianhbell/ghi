@@ -122,7 +122,7 @@ def get_issues(state):
         log_message = traceback.format_exc()
         print(BE)
     print(log_message)
-    return render_template('frontend.html', items=items, log_message=log_message)
+    return render_template('frontend.html', items=items, log_message=log_message, state=state)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)#, ssl_context=('cert.pem', 'key.pem'))
