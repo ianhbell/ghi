@@ -51,7 +51,10 @@ def api_calls(session):
     with requests.Session() as rs:
         for repo in the_repos:
             issues = []
-            r = rs.get('https://api.github.com/repos/'+repo+'/issues?state=all&filter=all', auth=('ianhbell', pat))
+            base_url = 'https://api.github.com/repos/'+repo+'/issues?state=all&filter=all'
+            r = rs.get(base_url, auth=('ianhbell', pat))
+            if not r.ok:
+                print(r)
             issues += r.json()
             while 'next' in r.links:
                 url = r.links['next']['url']
