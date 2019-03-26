@@ -5,12 +5,13 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <link href="//code.jquery.com/ui/1.9.2/themes/humanity/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.1/js/jquery.tablesorter.js"></script>
 </head>
 
 <body>
     {% for repo in repos %}
     <h3>{{ repo }}</h3>
-    <table>
+    <table id="{{ repo.replace('/','_') }}" class="tablesorter">
         <thead>
         <tr id="header_row" class="ui-widget-header">
             <th class="status">Issue #</th>
@@ -32,6 +33,11 @@
             {% endfor %}
         </tbody>
     </table>
+    <script>
+      $(function() {
+        $("#{{ repo.replace('/','_') }}").tablesorter();
+      });
+    </script>
     {% endfor %}
 
 </body>
