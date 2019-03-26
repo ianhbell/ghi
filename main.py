@@ -48,7 +48,7 @@ def api_calls(session):
     if 'Id' not in session:
         session['Id'] = str(uuid.uuid1())
         repoze = {}
-        pat = open(here+'/gh_pat','r').read()
+        pat = open(here+'/gh_pat','r').read().strip()
 
         with requests.Session() as rs:
             for repo in the_repos:
