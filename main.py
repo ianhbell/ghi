@@ -47,24 +47,24 @@ else:
 def api_calls(session):
     if 'Id' not in session:
         session['Id'] = str(uuid.uuid1())
-        repoze = {}
-        pat = open(here+'/gh_pat','r').read().strip()
+    repoze = {}
+    pat = open(here+'/gh_pat','r').read().strip()
 
-        with requests.Session() as rs:
-            for repo in the_repos:
-                issues = []
-                base_url = 'https://api.github.com/repos/'+repo+'/issues?state=all&filter=all'
-                r = rs.get(base_url, auth=('ianhbell', pat))
-                if not r.ok:
-                    print(r)
+    with requests.Session() as rs:
+        for repo in the_repos:
+            issues = []
+            base_url = 'https://api.github.com/repos/'+repo+'/issues?state=all&filter=all'
+            r = rs.get(base_url, auth=('ianhbell', pat))
+            if not r.ok:
+                print(r)
+            issues += r.json()
+            while 'next' in r.links:
+                url = r.links['next']['url']
+                r = rs.get(url, auth=('ianhbell', pat))
                 issues += r.json()
-                while 'next' in r.links:
-                    url = r.links['next']['url']
-                    r = rs.get(url, auth=('ianhbell', pat))
-                    issues += r.json()
-                repoze[repo] = issues
-        db.session.add(RepoData(session_id=session['Id'], contents=json.dumps(repoze)))
-        db.session.commit()
+            repoze[repo] = issues
+    db.session.add(RepoData(session_id=session['Id'], contents=json.dumps(repoze)))
+    db.session.commit()
 
 def get_assignees(issue):
     return [a['login'].replace('EricLemmon','Eric').replace('ianhbell','Ian') for a in issue['assignees']]
