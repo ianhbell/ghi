@@ -15,6 +15,8 @@ from flask_sqlalchemy import SQLAlchemy
 # Other libraries
 import requests
 
+here = os.path.dirname(__file__)
+
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
 
@@ -46,7 +48,7 @@ def api_calls(session):
     if 'Id' not in session:
         session['Id'] = str(uuid.uuid1())
         repoze = {}
-        pat = open('gh_pat','r').read()
+        pat = open(here+'/gh_pat','r').read()
 
         with requests.Session() as rs:
             for repo in the_repos:
@@ -109,7 +111,9 @@ def get_items(*, session, state):
             })
     return items
 
-def _get_issues(state):
+@app.route('/<state>_issues')
+def get_issues(state):
+    api_calls(session)
     log_message = ''
     items = get_items(session=session, state=state)
     try:
@@ -119,11 +123,6 @@ def _get_issues(state):
         print(BE)
     print(log_message)
     return render_template('frontend.html', items=items, log_message=log_message)
-
-@app.route('/<state>_issues')
-def get_issues(state):
-    api_calls(session)
-    return _get_issues(state)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)#, ssl_context=('cert.pem', 'key.pem'))
