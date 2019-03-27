@@ -45,8 +45,8 @@ else:
     HOME = '/media/Q/IHB/issues_notes'
 
 def api_calls(session, state):
-    if 'Id' not in session:
-        session['Id'] = str(uuid.uuid1())
+    # if 'Id' not in session:
+    session['Id'] = str(uuid.uuid1())
     repoze = {}
     # Personal access token, get it from Github->Settings->Developer Tools, store in file gh_pat
     pat = open(here+'/gh_pat','r').read().strip()
