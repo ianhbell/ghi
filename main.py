@@ -44,17 +44,18 @@ if sys.platform.startswith('win'):
 else:
     HOME = '/media/Q/IHB/issues_notes'
 
-def api_calls(session):
+def api_calls(session, state):
     if 'Id' not in session:
         session['Id'] = str(uuid.uuid1())
     repoze = {}
+    # Personal access token, get it from Github->Settings->Developer Tools, store in file gh_pat
     pat = open(here+'/gh_pat','r').read().strip()
 
     with requests.Session() as rs:
         for repo in the_repos:
             issues = []
-            base_url = 'https://api.github.com/repos/'+repo+'/issues?state=all&filter=all'
-            r = rs.get(base_url, auth=('ianhbell', pat))
+            base_url = 'https://api.github.com/repos/'+repo+'/issues'
+            r = rs.get(base_url, params=dict(state=state, filter='all'), auth=('ianhbell', pat))
             if not r.ok:
                 print(r)
             issues += r.json()
@@ -113,7 +114,7 @@ def get_items(*, session, state):
 
 @app.route('/<state>_issues')
 def get_issues(state):
-    api_calls(session)
+    api_calls(session, state)
     log_message = ''
     items = get_items(session=session, state=state)
     try:
