@@ -38,7 +38,7 @@ db.create_all()
 ##################     ROUTES     ########################
 ##########################################################
 
-the_repos = ['usnistgov/REFPROP-issues','usnistgov/REFPROP-wrappers','usnistgov/REFPROP-manager','usnistgov/REFPROP-cmake']
+the_repos = ['usnistgov/REFPROP-issues','usnistgov/REFPROP-wrappers','usnistgov/REFPROP-manager','usnistgov/REFPROP-cmake','usnistgov/REFPROP-tests']
 if sys.platform.startswith('win'):
     HOME = 'Q:/Public/IHB/issues_notes'
 else:
