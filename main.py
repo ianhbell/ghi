@@ -1,6 +1,7 @@
 # Python standard libraries
 from functools import wraps
 import os
+import codecs
 import json
 import time
 import timeit
@@ -78,7 +79,7 @@ def attach_notes(items):
     for repo in the_repos:
         path = os.path.join(HOME, repo.replace('/','_'))
         if os.path.exists(path):
-            with open(path) as fp:
+            with codecs.open(path,encoding='utf-8') as fp:
                 notes[repo] = json.load(fp)
 
     def get_note(item):
